@@ -3,12 +3,16 @@ package com.example.filedemo.service;
 import com.example.filedemo.exception.FileStorageException;
 import com.example.filedemo.exception.MyFileNotFoundException;
 import com.example.filedemo.property.FileStorageProperties;
+import com.spire.pdf.FileFormat;
+import com.spire.pdf.PdfDocument;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -21,9 +25,13 @@ public class FileStorageService {
 
     private final Path fileStorageLocation;
 
+    private final Path fileStorageLocationPdf2Word;
+
     @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
+                .toAbsolutePath().normalize();
+        this.fileStorageLocationPdf2Word = Paths.get(fileStorageProperties.getUploadDirPdf2Word())
                 .toAbsolutePath().normalize();
 
         try {
@@ -47,6 +55,15 @@ public class FileStorageService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
+            // 读取文件进行转换
+            if(fileName.contains(".pdf")){
+                PdfDocument pdf = new PdfDocument(targetLocation.toString());
+                String wordName = fileName.replace(".pdf",".docx");
+                pdf.saveToFile(this.fileStorageLocationPdf2Word.resolve(wordName).toString(), FileFormat.DOCX);
+                pdf.close();
+                return wordName;
+            }
+
             return fileName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
@@ -56,6 +73,9 @@ public class FileStorageService {
     public Resource loadFileAsResource(String fileName) {
         try {
             Path filePath = this.fileStorageLocation.resolve(fileName).normalize();
+            if(fileName.contains(".docx")){
+                filePath = this.fileStorageLocationPdf2Word.resolve(fileName).normalize();
+            }
             Resource resource = new UrlResource(filePath.toUri());
             if(resource.exists()) {
                 return resource;
@@ -66,4 +86,5 @@ public class FileStorageService {
             throw new MyFileNotFoundException("File not found " + fileName, ex);
         }
     }
+
 }
