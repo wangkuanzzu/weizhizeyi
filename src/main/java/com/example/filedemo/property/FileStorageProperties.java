@@ -6,14 +6,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class FileStorageProperties {
     private String uploadDir;
 
-    private String uploadDirPdf2Word;
+    private String transferDir;
 
-    public String getUploadDirPdf2Word() {
-        return uploadDirPdf2Word;
+    public String getTransferDir() {
+        return transferDir;
     }
 
-    public void setUploadDirPdf2Word(String uploadDirPdf2Word) {
-        this.uploadDirPdf2Word = uploadDirPdf2Word;
+    public void setTransferDir(String transferDir) {
+        this.transferDir = transferDir;
     }
 
     public String getUploadDir() {
