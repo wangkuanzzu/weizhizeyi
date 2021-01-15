@@ -1,7 +1,6 @@
 package com.example.filedemo.common;
 
 import com.spire.pdf.FileFormat;
-import com.sun.javafx.iio.ImageFormatDescription;
 
 /**
  * description: FileTypeEnum <br>

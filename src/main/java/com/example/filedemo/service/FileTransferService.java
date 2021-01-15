@@ -4,8 +4,7 @@ import com.example.filedemo.common.FileTypeEnum;
 import com.example.filedemo.exception.FileStorageException;
 import com.example.filedemo.exception.MyFileNotFoundException;
 import com.example.filedemo.property.FileStorageProperties;
-import com.spire.ms.System.Collections.IList;
-import com.spire.pdf.FileFormat;
+
 import com.spire.pdf.PdfDocument;
 import com.spire.pdf.PdfPageBase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,14 +63,26 @@ public class FileTransferService {
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
-            // 读取文件进行转换
-            PdfDocument pdf = new PdfDocument(targetLocation.toString());
+            // 读取pdf文件
+            PdfDocument pdf = new PdfDocument();
+            pdf.loadFromFile(targetLocation.toString());
             //去除水印
-            PdfPageBase ppb = pdf.getPages().add();
-            pdf.getPages().remove(ppb);
+//            PdfPageBase ppb = pdf.getPages().insert(0);
+//            pdf.getPages().removeAt(0);
+//            pdf.saveToFile(this.fileStorageLocation.resolve("997.pdf").toString());
+
+            //pdf转换成目标格式文件
             String transferName = fileName.replace(FileTypeEnum.PDF.getName(),fileTypeEnum.getName());
             pdf.saveToFile(this.fileTransferLocation.resolve(transferName).toString(), fileTypeEnum.getFileFormat());
             pdf.close();
+
+//            Document document = new Document();
+////            document.loadFromFile(this.fileTransferLocation.resolve(transferName).toString(), FileFormat.Docx);
+////            document.replace("Evaluation Warning : The document was created with Spire.PDF for Java.","",false,true);
+////            document.saveToFile(this.fileTransferLocation.resolve("t.docx").toString());
+////            document.close();
+
+
             return transferName;
 
         } catch (IOException ex) {

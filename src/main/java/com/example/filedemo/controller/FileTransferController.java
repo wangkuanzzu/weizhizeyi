@@ -1,9 +1,7 @@
 package com.example.filedemo.controller;
 
 import com.example.filedemo.common.FileTypeEnum;
-import com.example.filedemo.entity.TransferFileParam;
 import com.example.filedemo.payload.TransferFileResponse;
-import com.example.filedemo.service.FileStorageService;
 import com.example.filedemo.service.FileTransferService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +33,11 @@ public class FileTransferController {
     private FileTransferService fileTransferService;
 
     @PostMapping("/file/transfer")
-    public TransferFileResponse transferFile(@RequestBody TransferFileParam transferFileParam){
-        logger.info("文件转换参数:{}",transferFileParam);
-        MultipartFile file = transferFileParam.getFile();
-        String fileType = transferFileParam.getFile2Type();
-        String fileName = fileTransferService.transferFile(file,fileType);
+    public TransferFileResponse transferFile(@RequestParam("file") MultipartFile file, @RequestParam("file2Type") String file2Type){
+//        logger.info("文件转换参数:{}",transferFileParam);
+//        MultipartFile file = transferFileParam.getFile();
+//        String fileType = transferFileParam.getFile2Type();
+        String fileName = fileTransferService.transferFile(file,file2Type);
 
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/file/download/")

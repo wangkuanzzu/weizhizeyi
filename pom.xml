@@ -48,6 +48,11 @@
 			<artifactId>spire.pdf</artifactId>
 			<version>3.11.6</version>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId> e-iceblue </groupId>-->
+<!--			<artifactId>spire.doc.free</artifactId>-->
+<!--			<version>3.9.0</version>-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>

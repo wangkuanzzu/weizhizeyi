@@ -71,6 +71,11 @@ input {
     font-size: 1rem;
 }
 
+select {
+    width: 83.8%;
+    height: 40px;
+}
+
 input[type="file"] {
     border: 1px solid #128ff2;
     padding: 6px;

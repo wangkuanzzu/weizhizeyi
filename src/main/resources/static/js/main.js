@@ -17,15 +17,35 @@ var multipleFileUploadError = document.querySelector('#multipleFileUploadError')
 var multipleFileUploadSuccess = document.querySelector('#multipleFileUploadSuccess');
 
 
+window.onload = function(){
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/file/type/list");
+        xhr.onload = function() {
+            console.log(xhr.responseText);
+            var response = JSON.parse(xhr.responseText);
+            if(xhr.status == 200) {
+                var optionHtml = "";
+                for (var i = 0; i<response.length;i++){
+                    for(var k in response[i]){
+                        optionHtml = optionHtml + "<option value='"+k+"'>"+response[i][k]+"</option>";
+                    }
+                }
+                singleFileTransferType.innerHTML = optionHtml;
+            } else {
+                singleFileTransferType.innerHTML = "<option value=''>文件类型列表获取失败<option>"
+            }
+        };
+        xhr.send();
+};
+
 function transferSingleFile(file,type) {
     var formData = new FormData();
     formData.append("file", file);
     formData.append("file2Type", type);
 
-
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "/file/transfer");
-    xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
     xhr.onload = function() {
         console.log(xhr.responseText);
         var response = JSON.parse(xhr.responseText);

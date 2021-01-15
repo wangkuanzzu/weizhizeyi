@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
  * author: kuan <br>
  * version: 1.0 <br>
  */
+@Deprecated
 public class TransferFileParam {
 
     MultipartFile file;
