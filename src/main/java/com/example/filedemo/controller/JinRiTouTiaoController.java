@@ -26,10 +26,13 @@ import java.util.concurrent.TimeUnit;
 public class JinRiTouTiaoController {
 
     private final static String secretKey = "1234567.$12345qw";
-    private final static String mockKey = "mock";
     private final static String key = "pLPMNVOGqiSC4CGXBfmS6XIUFP";
 
-    private final static Cache<String, String> cache = Caffeine.newBuilder().initialCapacity(1024).maximumSize(102400).expireAfterWrite(300, TimeUnit.SECONDS).build();
+    private final static Cache<String, String> cache = Caffeine.newBuilder()
+            .initialCapacity(1024)
+            .maximumSize(102400)
+            .expireAfterWrite(300, TimeUnit.SECONDS)
+            .build();
     private String[] split;
 
     @PostMapping("/api/video")
@@ -37,7 +40,6 @@ public class JinRiTouTiaoController {
     public Result jieXi(@RequestBody RequestParamTouTiao paramTouTiao) {
         String dataString = paramTouTiao.getDataString();
         if (StringUtils.isEmpty(dataString)) {
-            log.info("参数不能为空! dataString=" + dataString);
             return Result.error("参数不能为空！");
         }
         /*
@@ -73,16 +75,15 @@ public class JinRiTouTiaoController {
             String timestamp = stringStringHashMap.get("timestamp");
             long nowTimestamp = System.currentTimeMillis();
             if(nowTimestamp-Long.valueOf(timestamp) > 60000){
-                return Result.error("不合法请求！");
+                return Result.error("请求不合法！");
             }
             StringBuilder urlBuilder = new StringBuilder();
             String urlStr = urlBuilder
                     .append(stringStringHashMap.get("api"))
                     .append("?key=").append(key)
                     .append("&url=").append(stringStringHashMap.get("videoUrl")).toString();
-
-            String cacheIfPresent = cache.getIfPresent(urlStr);
-            if (Objects.nonNull(cache.getIfPresent(urlStr))) {
+            String cacheIfPresent = cache.getIfPresent(dataString);
+            if (Objects.nonNull(cache.getIfPresent(cacheIfPresent))) {
                 return Result.success("缓存获取成功", cacheIfPresent);
             }
 
@@ -104,11 +105,12 @@ public class JinRiTouTiaoController {
                     result.append(line);
                 }
                 reader.close();
-                cache.put(urlStr, result.toString());
-                return Result.success("三方接口调用成功！", result.toString());
+                String encrypt = AesNewUtils.encrypt(result.toString(), secretKey);
+                cache.put(dataString, encrypt);
+                return Result.success("三方接口调用成功！", encrypt);
             }
 
-            return Result.error("三方接口调用失败！", result.toString());
+            return Result.error("三方接口调用失败！");
         } catch (Exception e) {
             return Result.error("请求异常！");
         }
