@@ -83,7 +83,7 @@ public class JinRiTouTiaoController {
                     .append("?key=").append(key)
                     .append("&url=").append(stringStringHashMap.get("videoUrl")).toString();
             String cacheIfPresent = cache.getIfPresent(dataString);
-            if (Objects.nonNull(cache.getIfPresent(cacheIfPresent))) {
+            if (Objects.nonNull(cache.getIfPresent(dataString))) {
                 return Result.success("缓存获取成功", cacheIfPresent);
             }
 
