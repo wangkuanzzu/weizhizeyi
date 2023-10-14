@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>汉字笔画</title>
+    <style>
+        #animation-target {
+            border: 1px solid #DDD;
+        }
+
+        #target {
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+<div style="text-align: center;margin-top: 30px">
+    <svg id="animation-target" xmlns="http://www.w3.org/2000/svg">
+        <line x1="0" y1="0" x2="200" y2="200" stroke="#DDD"/>
+        <line x1="200" y1="0" x2="0" y2="200" stroke="#DDD"/>
+        <line x1="100" y1="0" x2="100" y2="200" stroke="#DDD"/>
+        <line x1="0" y1="100" x2="200" y2="100" stroke="#DDD"/>
+    </svg>
+</div>
+<div id="target">
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+<script>
+    <!-- 渲染动画效果的函数-->
+    function renderAnimation(element, hanzi) {
+        let writer = HanziWriter.create(element, hanzi, {
+            width: 200,
+            height: 200,
+            padding: 5,
+            delayBetweenLoops: 2000,
+        })
+        writer.loopCharacterAnimation()
+    }
+
+    function renderStrokePath(group, strokePath, color) {
+        let path = document.createElementNS('http://www.w3.org/2000/svg', 'path')
+        path.setAttributeNS(null, 'd', strokePath)
+        path.style.fill = color
+        group.appendChild(path)
+    }
+
+    function createLine(x1, x2, y1, y2, color = '#DDD') {
+        let line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+        line.setAttributeNS(null, 'x1', x1)
+        line.setAttributeNS(null, 'x2', x2)
+        line.setAttributeNS(null, 'y1', y1)
+        line.setAttributeNS(null, 'y2', y2)
+        line.setAttributeNS(null, 'stroke', color)
+        return line
+    }
+
+    function renderLines(parentNode, width, height) {
+        let line1 = createLine(0, width, 0, height)
+        let line2 = createLine(width, 0, 0, height)
+        let line3 = createLine(width / 2, width / 2, 0, height)
+        let line4 = createLine(0, width, height / 2, height / 2)
+        parentNode.appendChild(line1)
+        parentNode.appendChild(line2)
+        parentNode.appendChild(line3)
+        parentNode.appendChild(line4)
+    }
+
+    function renderFanningStrokes(target, strokes, allStrokes) {
+        let svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+        svg.style.width = '100px'
+        svg.style.height = '100px'
+        svg.style.border = '1px solid #DDD'
+        svg.style.marginRight = '5px'
+        target.appendChild(svg)
+
+        renderLines(svg, 100, 100)
+
+        let group = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+
+        let transformData = HanziWriter.getScalingTransform(100, 100, 5)
+        group.setAttributeNS(null, 'transform', transformData.transform)
+        svg.appendChild(group)
+
+        allStrokes.forEach(strokePath => renderStrokePath(group, strokePath, '#DDD'))
+        strokes.forEach(strokePath => renderStrokePath(group, strokePath, '#555'))
+    }
+
+    // 渲染笔画效果的函数
+    function renderFanning(element, hanzi) {
+        HanziWriter.loadCharacterData(hanzi).then(function (charData) {
+            let target = document.getElementById(element)
+            for (let i = 0; i < charData.strokes.length; i++) {
+                let strokesPortion = charData.strokes.slice(0, i + 1)
+                renderFanningStrokes(target, strokesPortion, charData.strokes)
+            }
+        })
+    }
+
+    function getQueryVariable(variable) {
+        let query = window.location.search.substring(1)
+        let vars = query.split("&")
+        for (let i = 0; i < vars.length; i++) {
+            let pair = vars[i].split("=")
+            if (pair[0] === variable) {
+                return pair[1]
+            }
+        }
+        return false
+    }
+
+    const word = getQueryVariable('word')
+    if (word) {
+        // 调用函数生成图形
+        renderAnimation('animation-target', word)
+        renderFanning('target', word)
+    }
+</script>
+</body>
+</html>
