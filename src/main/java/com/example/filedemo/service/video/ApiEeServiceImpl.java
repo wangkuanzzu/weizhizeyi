@@ -1,5 +1,6 @@
 package com.example.filedemo.service.video;
 
+import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.example.filedemo.common.utils.HttpUtils;
 import com.example.filedemo.entity.MusicDetail;
@@ -7,6 +8,8 @@ import com.example.filedemo.entity.VideoDetail;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Log
@@ -29,13 +32,22 @@ public class ApiEeServiceImpl implements ApiService{
         }
         JSONObject data = jsonObject.getJSONObject("data");
         VideoDetail videoDetail = new VideoDetail();
+        videoDetail.setType(jsonObject.getString("type"));
+
         videoDetail.setAuthorName(data.getString("Name"));
         videoDetail.setAuthorCover(data.getString("avatar"));
 
-        videoDetail.setVideoTitle(data.getString("title"));
-        videoDetail.setVideoCover(data.getString("cover"));
+        videoDetail.setTitle(data.getString("title"));
+        videoDetail.setCover(data.getString("cover"));
+        videoDetail.setContent(data.getString("content"));
         videoDetail.setVideoDynamicCover(data.getString("cover"));
         videoDetail.setVideoUrl(data.getString("url"));
+
+        JSONArray images = data.getJSONArray("images");
+        if (images != null) {
+            List<String> strings = JSONArray.parseArray(images.toJSONString(), String.class);
+            videoDetail.setImageUrls(strings);
+        }
 
         MusicDetail musicDetail = new MusicDetail();
         if (data.getJSONObject("music") != null) {
@@ -76,5 +88,24 @@ public class ApiEeServiceImpl implements ApiService{
         System.out.println( jsonObject.getJSONObject("data").getString("title"));
         System.out.println( jsonObject.getJSONObject("data").getJSONObject("music").getString("author"));
 
+        String httpResult2 = "{ \n" +
+                "   \"status\": 101,\n" +
+                "   \"code\": 200, \n" +
+                "   \"msg\": \"获取成功\",\n" +
+                "   \"type\": \"img\",\n" +
+                "   \"解析时间：\": \"2022-08-07 16:00:29\",\n" +
+                "   \"data\": \n" +
+                "        { \n" +
+                "        \"title\": \"喜欢吗 不喜欢发一千字理由#甜妹 #ootd穿搭\", \n" +
+                "        \"cover\": \"https://p9-sign.douyinpic.com/tos-cn-i-0813/5ae2f4bbdfc04952b122872ad30a3dec~noop.jpeg?x-expires=1661068800&x-signature=1%2F95knTU52B3MzrIZO4K9pbNvnU%3D&from=4257465056&se=false&biz_tag=images_video_cover&l=202208071600290102081432373CBBBF6B\",\n" +
+                "        \"download_image\": \"https://p9-sign.douyinpic.com/tos-cn-i-0813/5ae2f4bbdfc04952b122872ad30a3dec~noop.jpeg?x-expires=1661068800&x-signature=1%2F95knTU52B3MzrIZO4K9pbNvnU%3D&from=4257465056&se=false&biz_tag=images_video_cover&l=202208071600290102081432373CBBBF6B\",\n" +
+                "        \n" +
+                "        \"images\": [ \"https://p26-sign.douyinpic.com/tos-cn-i-0813/5ae2f4bbdfc04952b122872ad30a3dec~tplv-dy-lqen_nbhd:q75.webp?x-expires=1662451200&x-signature=9V36eGKf00cu%2BKHXQuvBJFgNKo8%3D&from=4257465056&s=PackSourceEnum_DOUYIN_REFLOW&se=false&biz_tag=aweme_images&l=202208071600290102081432373CBBBF6B\", \"https://p3-sign.douyinpic.com/tos-cn-i-0813/649dbc9f990e4060b1cd0b91d167a6c8~tplv-dy-lqen_nbhd:q75.webp?x-expires=1662451200&x-signature=Fl%2FwgBucutsyT4VSAIj0d471BRY%3D&from=4257465056&s=PackSourceEnum_DOUYIN_REFLOW&se=false&biz_tag=aweme_images&l=202208071600290102081432373CBBBF6B\", \"https://p3-sign.douyinpic.com/tos-cn-i-0813/33aba2b400b0458ca9f1e2e0c4fdcfaf~tplv-dy-lqen_nbhd:q75.webp?x-expires=1662451200&x-signature=Y057viP%2BDiT0AZXM1RcuJvKFroM%3D&from=4257465056&s=PackSourceEnum_DOUYIN_REFLOW&se=false&biz_tag=aweme_images&l=202208071600290102081432373CBBBF6B\", \"https://p6-sign.douyinpic.com/tos-cn-i-0813/007a332072bd4e5082fdf3286cae72ba~tplv-dy-lqen_nbhd:q75.webp?x-expires=1662451200&x-signature=MCCG0PCzI9MBxUTzw5xiUtDaO3w%3D&from=4257465056&s=PackSourceEnum_DOUYIN_REFLOW&se=false&biz_tag=aweme_images&l=202208071600290102081432373CBBBF6B\", \"https://p6-sign.douyinpic.com/tos-cn-i-0813/028334cefcfa4494bf1aa641ad33cbe4~tplv-dy-lqen_nbhd:q75.webp?x-expires=1662451200&x-signature=kKdZUsR168Qau5DM2A2K%2B0eAD1I%3D&from=4257465056&s=PackSourceEnum_DOUYIN_REFLOW&se=false&biz_tag=aweme_images&l=202208071600290102081432373CBBBF6B\", \"https://p26-sign.douyinpic.com/tos-cn-i-0813/a95351f0a744450c9780cee185e7a8f7~tplv-dy-lqen_nbhd:q75.webp?x-expires=1662451200&x-signature=NRvKKibdFp%2BC48LGEnUFa%2BEk8Ts%3D&from=4257465056&s=PackSourceEnum_DOUYIN_REFLOW&se=false&biz_tag=aweme_images&l=202208071600290102081432373CBBBF6B\" ], \n" +
+                "        \"bigFile\": false,\n" +
+                "        } \n" +
+                "}";
+
+        JSONObject jsonObject2 = JSONObject.parseObject(httpResult2);
+        System.out.println( jsonObject2.getJSONObject("data").getJSONArray("images").getString(0));
     }
 }

@@ -2,7 +2,6 @@ package com.example.filedemo.service.video;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.example.filedemo.common.utils.HttpUtils;
-import com.example.filedemo.entity.VideoDetail;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
@@ -22,23 +21,23 @@ public class Api52ServiceImpl implements ApiService{
                 .append("?key=").append(KEY)
                 .append("&url=").append(dataMap.get("videoUrl")).toString();
         String httpResult = HttpUtils.httpGet(urlStr);
-
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
         if (jsonObject.getInteger("code") != 200) {
             return null;
         }
+        return httpResult;
 
-        JSONObject data = jsonObject.getJSONObject("data");
-        VideoDetail videoDetail = new VideoDetail();
-        videoDetail.setAuthorName(data.getString("video_authorName"));
-        videoDetail.setAuthorCover(data.getString("video_authorCover"));
-
-        videoDetail.setVideoTitle(data.getString("video_title"));
-        videoDetail.setVideoCover(data.getString("video_cover"));
-        videoDetail.setVideoDynamicCover(data.getString("video_animatedCover"));
-        videoDetail.setVideoUrl(data.getString("video_url"));
-
-        return JSONObject.toJSONString(videoDetail);
+//        JSONObject data = jsonObject.getJSONObject("data");
+//        VideoDetail videoDetail = new VideoDetail();
+//        videoDetail.setAuthorName(data.getString("video_authorName"));
+//        videoDetail.setAuthorCover(data.getString("video_authorCover"));
+//
+//        videoDetail.setTitle(data.getString("video_title"));
+//        videoDetail.setCover(data.getString("video_cover"));
+//        videoDetail.setVideoDynamicCover(data.getString("video_animatedCover"));
+//        videoDetail.setVideoUrl(data.getString("video_url"));
+//
+//        return JSONObject.toJSONString(videoDetail);
     }
 
     public static void main(String[] args) {
@@ -69,4 +68,6 @@ public class Api52ServiceImpl implements ApiService{
         System.out.println(jsonObject.getJSONObject("data").getString("video_title"));
         System.out.println(jsonObject.getJSONObject("data").getString("video_authorCover"));
     }
+
+
 }
