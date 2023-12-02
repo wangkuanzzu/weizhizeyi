@@ -1,4 +1,4 @@
-package com.example.filedemo.common;
+package com.example.filedemo.common.utils;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 

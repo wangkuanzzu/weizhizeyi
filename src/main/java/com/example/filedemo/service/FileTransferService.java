@@ -1,12 +1,11 @@
 package com.example.filedemo.service;
 
-import com.example.filedemo.common.FileTypeEnum;
+import com.example.filedemo.common.enumm.FileTypeEnum;
 import com.example.filedemo.exception.FileStorageException;
 import com.example.filedemo.exception.MyFileNotFoundException;
 import com.example.filedemo.property.FileStorageProperties;
 
 import com.spire.pdf.PdfDocument;
-import com.spire.pdf.PdfPageBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;

@@ -1,4 +1,4 @@
-package com.example.filedemo.common;
+package com.example.filedemo.common.utils;
 
 
 import javax.crypto.Cipher;
@@ -54,13 +54,18 @@ public class AesNewUtils {
         //	"api":"https://www.52api.cn/api/weishi",
         //	"timestemp":
 
+        String key1 = "1234567.$12345qw";
         long l = System.currentTimeMillis();
         String text = "videoUrl=https://video.weishi.qq.com/lHXJOqng;api=https://www.52api.cn/api/weishi;timestamp="+l;
-        String key1 = "1234567.$12345qw";
         String encrypt = encrypt(text, key1);
         System.out.println("text = " + text);
         System.out.println("encrypt = " + encrypt);
 
-
+        String text2 = "r0nHcHfzvxJyn4mwkZ6guwUCqjH+MeylAyz2FuaaJsr1Z/bTXcM3mhoH/JOUGioe1pAqkiMhM8e8Lajs4FFD++RKdhQI8sW4bZr58AjB3yuK8EFp09JYQto98iLVu6/jC0bGqPk41SnzvolpfcS0OtPnUp/Xp3+DeqZX0gbr5drea/6j3RuI4VlcKTnFEjVvnYmp4jeNhRlHlTCUWege7LH1Jv8VabxntngmTckKO+KHAvhSkUGeTvGRX/VuZ1jmCrUDiMSJVUfKFqDbTTNMxwSSuFIL3vnfvG7PTN2WVixRVWeup+6I+Xki5J2pciVQzDyHJFooz65Utwp7fP/FXsDZUDdszhkIFY5id0VMyk3R7xq/6FB6NUCeE6Dnd7DWzSRpWwOe+auX95pQS/QcEj+aa3fyjuEDXN8d36gZ+x02+HVjUHJvHVqrNQ99wRnc+BDDvP9XxOjvbRAIhl3V4vhLXQf31i/R6Xr5mozk4vTLbK8aQsgKJ45PQc0FSw87HpsIWM/J1LHeGBViO4HHfHswJmf2NlgIEGYFIx4+pmM2yXu5LhCsPYJ1uoZhJn2N";
+        String decrypt = decrypt(text2, key1);
+        System.out.println("text2 = " + text2);
+        System.out.println("decrypt = " + decrypt);
     }
+
+
 }

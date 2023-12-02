@@ -1,6 +1,6 @@
 package com.example.filedemo.controller;
 
-import com.example.filedemo.common.FileTypeEnum;
+import com.example.filedemo.common.enumm.FileTypeEnum;
 import com.example.filedemo.payload.TransferFileResponse;
 import com.example.filedemo.service.FileTransferService;
 import org.slf4j.Logger;

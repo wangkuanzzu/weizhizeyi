@@ -1,8 +1,8 @@
 package com.example.filedemo.controller;
 
-import com.example.filedemo.common.AesNewUtils;
-import com.example.filedemo.common.Result;
-import com.example.filedemo.entity.RequestParamTouTiao;
+import com.example.filedemo.common.utils.AesNewUtils;
+import com.example.filedemo.entity.VideoRequest;
+import com.example.filedemo.entity.VideoResponse;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.extern.java.Log;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 @Controller
 @Log
-public class JinRiTouTiaoController {
+public class VideoControllerBackup {
 
     private final static String secretKey = "1234567.$12345qw";
     private final static String key = "pLPMNVOGqiSC4CGXBfmS6XIUFP";
@@ -31,14 +31,13 @@ public class JinRiTouTiaoController {
             .maximumSize(102400)
             .expireAfterWrite(300, TimeUnit.SECONDS)
             .build();
-    private String[] split;
 
     @PostMapping("/api/video")
     @ResponseBody
-    public Result jieXi(@RequestBody RequestParamTouTiao paramTouTiao) {
+    public VideoResponse jieXi(@RequestBody VideoRequest paramTouTiao) {
         String dataString = paramTouTiao.getDataString();
         if (StringUtils.isEmpty(dataString)) {
-            return Result.error("参数不能为空！");
+            return VideoResponse.error("参数不能为空！");
         }
         /*
                 加密信息生成：
@@ -73,7 +72,7 @@ public class JinRiTouTiaoController {
             String timestamp = stringStringHashMap.get("timestamp");
             long nowTimestamp = System.currentTimeMillis();
             if(nowTimestamp-Long.valueOf(timestamp) > 60000){
-                return Result.error("请求不合法！");
+                return VideoResponse.error("请求不合法！");
             }
             StringBuilder urlBuilder = new StringBuilder();
             String urlStr = urlBuilder
@@ -82,7 +81,7 @@ public class JinRiTouTiaoController {
                     .append("&url=").append(stringStringHashMap.get("videoUrl")).toString();
             String cacheIfPresent = cache.getIfPresent(dataString);
             if (Objects.nonNull(cache.getIfPresent(dataString))) {
-                return Result.success("缓存获取成功", cacheIfPresent);
+                return VideoResponse.success("缓存获取成功", cacheIfPresent);
             }
 
             StringBuilder result = new StringBuilder();
@@ -105,12 +104,12 @@ public class JinRiTouTiaoController {
                 reader.close();
                 String encrypt = AesNewUtils.encrypt(result.toString(), secretKey);
                 cache.put(dataString, encrypt);
-                return Result.success("三方接口调用成功！", encrypt);
+                return VideoResponse.success("三方接口调用成功！", encrypt);
             }
 
-            return Result.error("三方接口调用失败！");
+            return VideoResponse.error("三方接口调用失败！");
         } catch (Exception e) {
-            return Result.error("请求异常！");
+            return VideoResponse.error("请求异常！");
         }
     }
 }

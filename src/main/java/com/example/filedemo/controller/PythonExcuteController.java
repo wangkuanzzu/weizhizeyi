@@ -1,7 +1,7 @@
 package com.example.filedemo.controller;
 
-import com.example.filedemo.common.Result;
-import com.example.filedemo.entity.RequestParamTouTiao;
+import com.example.filedemo.entity.VideoResponse;
+import com.example.filedemo.entity.VideoRequest;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,13 +24,8 @@ public class PythonExcuteController {
 
     @PostMapping("/api/python")
     @ResponseBody
-    public Result jieXi(@RequestBody RequestParamTouTiao paramTouTiao) {
-
-
-
-
-
-        return Result.success("成功", null);
+    public VideoResponse jieXi(@RequestBody VideoRequest paramTouTiao) {
+        return VideoResponse.success("成功", null);
     }
 
 
