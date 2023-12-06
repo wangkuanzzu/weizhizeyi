@@ -5,7 +5,6 @@ import com.alibaba.fastjson2.JSONObject;
 import com.example.filedemo.common.utils.HttpUtils;
 import com.example.filedemo.entity.MusicDetail;
 import com.example.filedemo.entity.VideoDetail;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -72,7 +71,7 @@ public class ApiEeServiceImpl implements ApiService{
                 .append("&url=").append(dataMap.get("videoUrl")).toString();
         String httpResult = HttpUtils.httpGet(urlStr);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
-        if (jsonObject.getInteger("code") != 200 || jsonObject.getInteger("status") != 101) {
+        if (jsonObject.getInteger("code") != 200) {
             log.error("三方接口返回失败", JSONObject.toJSONString(jsonObject));
             return null;
         }
