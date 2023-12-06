@@ -31,7 +31,7 @@ public class ApiEeServiceImpl implements ApiService{
         String httpResult = HttpUtils.httpGet(urlStr);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
         if (jsonObject.getInteger("code") != 200 || jsonObject.getInteger("status") != 101) {
-            log.error("三方接口返回失败", JSONObject.toJSONString(jsonObject));
+            log.error("EE平台接口返回失败", JSONObject.toJSONString(jsonObject));
             return null;
         }
         JSONObject data = jsonObject.getJSONObject("data");
@@ -72,7 +72,7 @@ public class ApiEeServiceImpl implements ApiService{
         String httpResult = HttpUtils.httpGet(urlStr);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
         if (jsonObject.getInteger("code") != 200) {
-            log.error("三方接口返回失败", JSONObject.toJSONString(jsonObject));
+            log.error("52平台接口返回失败", JSONObject.toJSONString(jsonObject));
             return null;
         }
         JSONObject data = jsonObject.getJSONObject("data");

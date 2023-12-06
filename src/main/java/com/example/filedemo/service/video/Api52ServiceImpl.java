@@ -23,7 +23,7 @@ public class Api52ServiceImpl implements ApiService{
         String httpResult = HttpUtils.httpGet(urlStr);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
         if (jsonObject.getInteger("code") != 200) {
-            log.error("三方接口返回失败", JSONObject.toJSONString(jsonObject));
+            log.error("52平台接口返回失败", JSONObject.toJSONString(jsonObject));
             return null;
         }
         return httpResult;
