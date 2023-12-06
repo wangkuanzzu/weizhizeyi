@@ -2,12 +2,12 @@ package com.example.filedemo.service.video;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.example.filedemo.common.utils.HttpUtils;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
-@Log
+@Slf4j
 @Service
 public class Api52ServiceImpl implements ApiService{
 
@@ -23,45 +23,32 @@ public class Api52ServiceImpl implements ApiService{
         String httpResult = HttpUtils.httpGet(urlStr);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
         if (jsonObject.getInteger("code") != 200) {
+            log.error("三方接口返回失败", JSONObject.toJSONString(jsonObject));
             return null;
         }
         return httpResult;
-
-//        JSONObject data = jsonObject.getJSONObject("data");
-//        VideoDetail videoDetail = new VideoDetail();
-//        videoDetail.setAuthorName(data.getString("video_authorName"));
-//        videoDetail.setAuthorCover(data.getString("video_authorCover"));
-//
-//        videoDetail.setTitle(data.getString("video_title"));
-//        videoDetail.setCover(data.getString("video_cover"));
-//        videoDetail.setVideoDynamicCover(data.getString("video_animatedCover"));
-//        videoDetail.setVideoUrl(data.getString("video_url"));
-//
-//        return JSONObject.toJSONString(videoDetail);
     }
 
     public static void main(String[] args) {
         String httpResult = "{\n" +
                 "\"code\": 200,\n" +
                 "\"msg\": \"success\",\n" +
-                "\"data\": {\n" +
-                "\"video_title\": \"吴京心想：凯歌应该看到我抱他儿子了吧\",\n" +
-                "\"video_cover\": \"http://weishi.gtimg.com/upload/20230708/782390229261.jpeg\",\n" +
-                "\"video_dynamicCover\": \"\",\n" +
-                "\"video_animatedCover\": \"http://shp.qpic.cn/wscover/0/gzc_2854_1047_0bc3fubbyaac4qaksonkqvsbkliedqwqehca_200_1/0?t=1688778247&q=90\",\n" +
-                "\"video_animatedCover5f\": \"http://shp.qpic.cn/wscover/0/gzc_2854_1047_0bc3fubbyaac4qaksonkqvsbkliedqwqehca_105_1/0?t=1688778246&q=90\",\n" +
-                "\"video_playNum\": 1800467,\n" +
-                "\"video_dingNum\": 4455,\n" +
-                "\"video_commentNum\": 492,\n" +
-                "\"video_releaseDate\": \"2023-07-08 09:03:59\",\n" +
-                "\"video_authorName\": \"明星大头条\",\n" +
-                "\"video_authorCover\": \"http://avatar0.weishi.qq.com/uDNFBNJp7-2VvaU2MFwCs0w0G2J2lVoi7ilqU_100.jpg\",\n" +
-                "\"video_authorCreatetime\": \"2021-04-22 00:29:22\",\n" +
-                "\"video_authorAddress\": \"\",\n" +
-                "\"video_url\": \"http://v.weishi.qq.com/v.weishi.qq.com/gzc_2854_1047_0bc3fubbyaac4qaksonkqvsbkliedqwqehca.f70.mp4?dis_k=97dc532a35c2239839ff5e559bbd457b&dis_t=1701513403&fromtag=0&pver=1.0.0\"\n" +
+                "-\"data\": {\n" +
+                "\"work_title\": \"定格的瞬间既是永恒\",\n" +
+                "\"work_type\": \"video\",\n" +
+                "\"work_cover\": \"https://p2.a.yximgs.com/upic/2023/07/17/10/BMjAyMzA3MTcxMDM5MTFfMTk2NzkwMTAzOF8xMDgxNjMzMTk1MjVfMV8z_B8b948fe2e7104a9392813aab11a0cdb4.jpg?clientCacheKey=3xhtqvyeidhxdek.jpg&di=dd0e93ab&bp=10000\",\n" +
+                "\"work_releaseDate\": \"2023-07-17 10:39:31\",\n" +
+                "\"work_viewCount\": 413599,\n" +
+                "\"work_likeCount\": 6295,\n" +
+                "\"work_commentCount\": 213,\n" +
+                "\"work_shareCount\": null,\n" +
+                "\"work_authorName\": \"ʚ张 婷 婷 ɞ.\",\n" +
+                "\"work_avatar\": \"https://p4-pro.a.yximgs.com/uhead/AB/2023/09/16/22/BMjAyMzA5MTYyMjQxNTlfMTk2NzkwMTAzOF8xX2hkMzE3Xzg0NA==_s.jpg\",\n" +
+                "\"work_authorKwaiId\": \"A59-Z1127L\",\n" +
+                "\"work_url\": \"https://v1.kwaicdn.com/upic/2023/07/17/10/BMjAyMzA3MTcxMDM5MTFfMTk2NzkwMTAzOF8xMDgxNjMzMTk1MjVfMV8z_b_Bc4f1d70552b934531f227f22b62038e9.mp4?pkey=AAXmVBT0ojH2dVe4rI2vGyXThZROGaplxJmdPPNUzcfszX2_h_qHeJhjzah3exLr3SYSXZiqHWCyIy4NJX7c91HO8OxobPfE-SQceU03A7rTJovJPvum5htf41QOFFVyx68&clientCacheKey=3xhtqvyeidhxdek_b.mp4&tt=b&di=dd0e93ab&bp=10000\"\n" +
                 "},\n" +
-                "\"exec_time\": 1.230361,\n" +
-                "\"ip\": \"106.37.113.223\"\n" +
+                "\"exec_time\": 1.261787,\n" +
+                "\"ip\": \"106.37.112.107\"\n" +
                 "}";
         System.out.println(httpResult);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);

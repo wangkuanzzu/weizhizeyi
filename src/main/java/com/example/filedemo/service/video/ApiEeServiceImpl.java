@@ -6,13 +6,13 @@ import com.example.filedemo.common.utils.HttpUtils;
 import com.example.filedemo.entity.MusicDetail;
 import com.example.filedemo.entity.VideoDetail;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@Log
+@Slf4j
 @Service
 public class ApiEeServiceImpl implements ApiService{
 
@@ -20,14 +20,19 @@ public class ApiEeServiceImpl implements ApiService{
 
     @Override
     public String generateVideoDetail(Map dataMap) {
+
+        if (dataMap.get("videoUrl").toString().contains("kuaishou.com")) {
+            return kuaiShou(dataMap);
+        }
+
         StringBuilder urlBuilder = new StringBuilder();
         String urlStr = urlBuilder
                 .append(EE_API)
                 .append(dataMap.get("videoUrl")).toString();
         String httpResult = HttpUtils.httpGet(urlStr);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
-
         if (jsonObject.getInteger("code") != 200 || jsonObject.getInteger("status") != 101) {
+            log.error("三方接口返回失败", JSONObject.toJSONString(jsonObject));
             return null;
         }
         JSONObject data = jsonObject.getJSONObject("data");
@@ -59,6 +64,52 @@ public class ApiEeServiceImpl implements ApiService{
         return JSONObject.toJSONString(videoDetail);
     }
 
+    private String kuaiShou(Map dataMap){
+        StringBuilder urlBuilder = new StringBuilder();
+        String urlStr = urlBuilder
+                .append("https://www.52api.cn/api/kuaishou")
+                .append("?key=").append("pLPMNVOGqiSC4CGXBfmS6XIUFP")
+                .append("&url=").append(dataMap.get("videoUrl")).toString();
+        String httpResult = HttpUtils.httpGet(urlStr);
+        JSONObject jsonObject = JSONObject.parseObject(httpResult);
+        if (jsonObject.getInteger("code") != 200 || jsonObject.getInteger("status") != 101) {
+            log.error("三方接口返回失败", JSONObject.toJSONString(jsonObject));
+            return null;
+        }
+        JSONObject data = jsonObject.getJSONObject("data");
+        VideoDetail videoDetail = new VideoDetail();
+        if (jsonObject.getString("work_type").equals("video")) {
+            videoDetail.setType("mp4");
+        } else {
+            videoDetail.setType("img");
+        }
+
+        videoDetail.setAuthorName(data.getString("work_authorName"));
+        videoDetail.setAuthorCover(data.getString("work_avatar"));
+
+        videoDetail.setTitle(data.getString("work_title"));
+        videoDetail.setCover(data.getString("work_cover"));
+        videoDetail.setContent(data.getString("work_content"));
+        videoDetail.setVideoDynamicCover(data.getString("work_cover"));
+        videoDetail.setVideoUrl(data.getString("work_url"));
+
+        JSONArray images = data.getJSONArray("images");
+        if (images != null) {
+            List<String> strings = JSONArray.parseArray(images.toJSONString(), String.class);
+            videoDetail.setImageUrls(strings);
+        }
+
+        MusicDetail musicDetail = new MusicDetail();
+        if (data.getJSONObject("music") != null) {
+            musicDetail.setAuthor(data.getJSONObject("music").getString("author"));
+            musicDetail.setAvatar(data.getJSONObject("music").getString("avatar"));
+            musicDetail.setUrl(data.getJSONObject("music").getString("url"));
+        }
+        videoDetail.setMusic(musicDetail);
+        return JSONObject.toJSONString(videoDetail);
+    }
+
+
     public static void main(String[] args) {
         String httpResult = "{\n" +
                 "\t\"status\": 101,\n" +
@@ -84,6 +135,7 @@ public class ApiEeServiceImpl implements ApiService{
                 "\t},\n" +
                 "\t\"type\": \"mp4\"\n" +
                 "}";
+        System.out.println(httpResult);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
         System.out.println( jsonObject.getJSONObject("data").getString("title"));
         System.out.println( jsonObject.getJSONObject("data").getJSONObject("music").getString("author"));
