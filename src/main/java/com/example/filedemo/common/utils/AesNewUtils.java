@@ -56,7 +56,7 @@ public class AesNewUtils {
 
         String key1 = "1234567.$12345qw";
         long l = System.currentTimeMillis();
-        String text = "videoUrl=https://v.douyin.com/iRTta2vB/;api=https://www.52api.cn/api/weishi;timestamp="+l;
+        String text = "videoUrl=https://www.kuaishou.com/f/X-4BRE8byitAu8Nj;api=https://www.52api.cn/api/weishi;timestamp="+l;
         String encrypt = encrypt(text, key1);
         System.out.println("text = " + text);
         System.out.println("encrypt = " + encrypt);

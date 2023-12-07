@@ -77,7 +77,7 @@ public class ApiEeServiceImpl implements ApiService{
         }
         JSONObject data = jsonObject.getJSONObject("data");
         VideoDetail videoDetail = new VideoDetail();
-        if (jsonObject.getString("work_type").equals("video")) {
+        if ("video".equals(data.getString("work_type"))) {
             videoDetail.setType("mp4");
         } else {
             videoDetail.setType("img");
