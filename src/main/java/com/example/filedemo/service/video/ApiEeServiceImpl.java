@@ -16,6 +16,7 @@ import java.util.Map;
 public class ApiEeServiceImpl implements ApiService{
 
     private final static String EE_API = "http://web.eeapi.cn/api/video/32B436849149DAACF6FDC6C880B7F0D02A1E4698A4FFA757CB/4233/?url=";
+    private final static String EE_API_999 = "http://api.999999999.run/api/video/32B436849149DAACF6FDC6C880B7F0D02A1E4698A4FFA757CB/4233/?url=";
 
     @Override
     public String generateVideoDetail(Map dataMap) {
@@ -26,7 +27,7 @@ public class ApiEeServiceImpl implements ApiService{
 
         StringBuilder urlBuilder = new StringBuilder();
         String urlStr = urlBuilder
-                .append(EE_API)
+                .append(EE_API_999)
                 .append(dataMap.get("videoUrl")).toString();
         String httpResult = HttpUtils.httpGet(urlStr);
         JSONObject jsonObject = JSONObject.parseObject(httpResult);
