@@ -21,9 +21,9 @@ public class ApiEeServiceImpl implements ApiService{
     @Override
     public String generateVideoDetail(Map dataMap) {
 
-        if (dataMap.get("videoUrl").toString().contains("kuaishou.com")) {
-            return kuaiShou(dataMap);
-        }
+//        if (dataMap.get("videoUrl").toString().contains("kuaishou.com")) {
+//            return kuaiShou(dataMap);
+//        }
 
         StringBuilder urlBuilder = new StringBuilder();
         String urlStr = urlBuilder
