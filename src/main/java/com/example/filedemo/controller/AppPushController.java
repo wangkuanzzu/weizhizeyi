@@ -5,6 +5,7 @@ import com.alibaba.fastjson2.JSONObject;
 import com.example.filedemo.common.utils.HttpUtils;
 import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -98,12 +99,18 @@ public class AppPushController {
         if (idfaData == null) {
             Map<String, Object> resultMap = new HashMap<>();
             resultMap.put("result", 1);
-            resultMap.put("message", "非推广商来源激活");
+            resultMap.put("message", "非推广商来源激活成功");
             return resultMap;
         }
 
         JSONObject jsonObject = JSON.parseObject(redisTemplate.opsForValue().get(idfa).toString());
         String callback = jsonObject.getString("callback");
+        if(StringUtils.isEmpty(callback)){
+            Map<String, Object> resultMap = new HashMap<>();
+            resultMap.put("result", 0);
+            resultMap.put("message", "回调地址为空，激活失败" + JSON.toJSONString(callback));
+            return resultMap;
+        }
         JSONObject callbackResult = JSONObject.parseObject(HttpUtils.httpGet(callback));
         Integer result = callbackResult.getInteger("result");
         if (result == 1){
